@@ -1,0 +1,86 @@
+import turtle
+import time
+import random
+
+# Initialize variables
+x = 0
+y = 0
+run = True
+
+# Set up the window
+win = turtle.Screen()
+win.setup(width=1000, height=500)
+win.tracer(0)
+win.bgcolor('yellow')
+
+# Create the snake head
+head = turtle.Turtle()
+head.shape('square')
+head.direction = "stop"
+
+# Create the food
+food = turtle.Turtle()
+food.shape('circle')
+food.color('pink')
+food.penup()
+food.goto(random.randint(-150, 150), random.randint(-150, 150))
+
+# Define movement functions
+def up():
+    if head.direction != "down":
+        head.direction = "up"
+
+def down():
+    if head.direction != "up":
+        head.direction = "down"
+
+def left():
+    if head.direction != "right":
+        head.direction = "left"
+
+def right():
+    if head.direction != "left":
+        head.direction = "right"
+
+def move():
+    if head.direction == "up":
+        global y
+        y += 20
+    if head.direction == "down":
+        global y
+        y -= 20
+    if head.direction == "left":
+        global x
+        x -= 20
+    if head.direction == "right":
+        global x
+        x += 20
+    head.goto(x, y)
+
+# Define the function to stop the game
+def stop_game():
+    global run
+    run = False        
+
+# Set up key bindings
+win.listen()
+win.onkeypress(up, "w")
+win.onkeypress(down, "s")
+win.onkeypress(left, "a")
+win.onkeypress(right, "d")
+win.onkeypress(stop_game, "q")
+
+# Game loop
+delay = 0.050
+while run:
+    win.update()
+    
+    # Check for collision with the food
+    if head.distance(food) < 20:
+        food.goto(random.randint(-150, 150), random.randint(-150, 150))
+    
+    move()
+    time.sleep(delay)
+
+win.bye()
+
